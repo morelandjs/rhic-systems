@@ -24,7 +24,8 @@ cachedir.mkdir(parents=True, exist_ok=True)
 #: such as ``'PbPb2760'``, ``'AuAu200'``, ``'pPb5020'``.
 #: Even if the project uses only a single system,
 #: this should still be a list of one system string.
-systems = ['PbPb2760', 'PbPb5020']
+systems = ['dAu200', 'He3Au200', 'CuCu200', 'CuAu200', 'AuAu200', 'UU193']
+#systems = ['dAu200', 'He3Au200', 'CuCu200', 'CuAu200', 'AuAu200']
 
 
 def parse_system(system):
@@ -32,7 +33,7 @@ def parse_system(system):
     Parse a system string into a pair of projectiles and a beam energy.
 
     """
-    match = re.fullmatch('([A-Z]?[a-z])([A-Z]?[a-z])([0-9]+)', system)
+    match = re.fullmatch(r"([A-Z]?[a-z]*[0-9]?)([A-Z]?[a-z]*)([0-9]+)", system)
     return match.group(1, 2), int(match.group(3))
 
 

@@ -11,7 +11,7 @@ from urllib.request import urlopen
 import numpy as np
 import yaml
 
-from . import cachedir, systems
+from . import cachedir, systems, parse_system
 
 
 class HEPData:
@@ -128,7 +128,7 @@ class HEPData:
             .format(name, quals)
         )
 
-    def dataset(self, name=None, maxcent=70, ignore_bins=[], **quals):
+    def dataset(self, name=None, maxcent=100, ignore_bins=[], **quals):
         """
         Return a dict containing:
 
@@ -204,114 +204,185 @@ def _data():
     """
     data = {s: {} for s in systems}
 
-    # PbPb2760 and PbPb5020 dNch/deta
-    for system, args, name in [
-            ('PbPb2760', (880049, 1), 'D(N)/DETARAP'),
-            ('PbPb5020', (1410589, 2),
-             r'$\mathrm{d}N_\mathrm{ch}/\mathrm{d}\eta$'),
-    ]:
-        data[system]['dNch_deta'] = {None: HEPData(*args).dataset(name)}
+    # dAu200 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['dAu200']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 20.3, 1.7),
+        (( 5, 10),  7.5, 17.4, 1.5),
+        ((10, 20),   15, 15.4, 1.3),
+        ((20, 30),   25, 13.2, 1.1),
+        ((30, 40),   35, 11.3, 0.9),
+        ((40, 50),   45,  9.5, 0.8),
+        ((50, 60),   55,  7.8, 0.7),
+        ((60, 70),   65,  6.3, 0.5),
+    ])
+
+    data['dAu200']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
+
+    # He3Au200 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['He3Au200']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 26.7, 1.8),
+        (( 5, 10),  7.5, 23.2, 1.5),
+        ((10, 20),   15, 20.6, 1.4),
+        ((20, 30),   25, 17.7, 1.2),
+        ((30, 40),   35, 14.9, 1.0),
+        ((40, 50),   45, 12.0, 0.8),
+        ((50, 60),   55,  9.3, 0.6),
+        ((60, 70),   65,  7.0, 0.5),
+    ])
+
+    data['He3Au200']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
+
+    # CuCu200 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['CuCu200']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 166.8, 13.2),
+        (( 5, 10),  7.5, 139.9, 11.1),
+        ((10, 15), 12.5, 117.1,  9.3),
+        ((15, 20), 17.5,  97.9,  7.8),
+        ((20, 25), 22.5,  81.6,  6.5),
+        ((25, 30), 27.5,  67.8,  5.4),
+        ((30, 35), 32.5,  56.1,  4.4),
+        ((35, 40), 37.5,  46.0,  3.6),
+        ((40, 45), 42.5,  37.5,  3.0),
+    ])
+
+    data['CuCu200']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
+
+    # CuAu200 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['CuAu200']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 288.3, 17.3),
+        (( 5, 10),  7.5, 249.8, 15.0),
+        ((10, 15), 12.5, 212.8, 12.8),
+        ((15, 20), 17.5, 179.4, 10.8),
+        ((20, 25), 22.5, 150.0,  9.0),
+        ((25, 30), 27.5, 124.5,  7.5),
+        ((30, 35), 32.5, 102.3,  6.1),
+        ((35, 40), 37.5,  83.3,  5.0),
+        ((40, 45), 42.5,  67.0,  4.0),
+        ((45, 50), 47.5,  53.1,  3.2),
+        ((50, 55), 52.5,  41.4,  2.5),
+        ((55, 60), 57.5,  31.9,  1.9),
+    ])
+
+    data['CuAu200']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
+
+    # AuAu200 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['AuAu200']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 599.0,  34.7),
+        (( 5, 10),  7.5, 498.7,  28.9),
+        ((10, 15), 12.5, 403.0,  25.0),
+        ((15, 20), 17.5, 332.5,  21.2),
+        ((20, 25), 22.5, 273.6,  18.6),
+        ((25, 30), 27.5, 223.4,  16.4),
+        ((30, 35), 32.5, 180.8,  14.3),
+        ((35, 40), 37.5, 144.5,  12.6),
+        ((40, 45), 42.5, 113.9,  10.9),
+        ((45, 50), 47.5,  88.3,   9.3),
+        ((50, 55), 52.5,  67.1,   8.1),
+        ((55, 60), 57.5,  50.0,   6.7),
+    ])
+
+    data['AuAu200']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
+
+    # UU193 transverse energy
+    # https://arxiv.org/abs/1509.06727
+    data['UU193']['dET_deta'] = {}
+
+    cent, x, y, yerr = zip(*[
+        (( 0,  5),  2.5, 783.0,  46.1),
+        (( 5, 10),  7.5, 625.6,  36.9),
+        ((10, 15), 12.5, 504.0,  29.7),
+        ((15, 20), 17.5, 406.2,  23.9),
+        ((20, 25), 22.5, 325.9,  19.2),
+        ((25, 30), 27.5, 259.2,  15.3),
+        ((30, 35), 32.5, 203.7,  12.0),
+        ((35, 40), 37.5, 157.8,   9.3),
+        ((40, 45), 42.5, 119.9,   7.1),
+        ((45, 50), 47.5, 89.16,   5.3),
+    ])
+
+    data['UU193']['dET_deta'][None] = dict(
+        cent=cent,
+        x=np.array(x),
+        y=np.array(y),
+        yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    )
 
     # PbPb2760 transverse energy
     # ignore bin 0-5 since it's redundant with 0-2.5 and 2.5-5
-    dset = HEPData(1427723, 1).dataset('$E_{T}$', ignore_bins=[(0, 5)])
-    dset['yerr']['sys'] = dset['yerr'].pop('sys,total')
-    data['PbPb2760']['dET_deta'] = {None: dset}
+    #dset = HEPData(1427723, 1).dataset('$E_{T}$', ignore_bins=[(0, 5)])
+    #dset['yerr']['sys'] = dset['yerr'].pop('sys,total')
+    #data['PbPb2760']['dET_deta'] = {None: dset}
 
-    # PbPb2760 identified dN/dy and mean pT
-    system = 'PbPb2760'
+    # PbPb5020 dNch/deta
+    #data['PbPb5020']['dNch_deta'] = {
+    #    None: HEPData(1410589, 2).dataset(
+    #        r'$\mathrm{d}N_\mathrm{ch}/\mathrm{d}\eta$')}
 
-    for obs, table, combine_func in [
-            ('dN_dy', 31, np.sum),
-            ('mean_pT', 32, np.mean),
-    ]:
-        data[system][obs] = {}
-        d = HEPData(1222333, table)
-        for key, re_products in [
-            ('pion', ['PI+', 'PI-']),
-            ('kaon', ['K+', 'K-']),
-            ('proton', ['P', 'PBAR']),
-        ]:
-            dsets = [
-                d.dataset(RE='PB PB --> {} X'.format(i))
-                for i in re_products
-            ]
+    # XeXe5440 dNch/deta
+    # https://arxiv.org/abs/1805.04432
+    #data['XeXe5440']['dNch_deta'] = {}
 
-            data[system][obs][key] = dict(
-                dsets[0],
-                y=combine_func([d['y'] for d in dsets], axis=0),
-                yerr={
-                    e: combine_func([d['yerr'][e] for d in dsets], axis=0)
-                    for e in dsets[0]['yerr']
-                }
-            )
+    #cent, x, y, yerr = zip(*[
+    #    ((0.0, 2.5), 1.25, 1238,  25),
+    #    ((2.5, 5.0), 3.75, 1096,  27),
+    #    ((5.0, 7.5), 6.25,  986,  25),
+    #    ((7.5,  10), 8.75,  891,  24),
+    #    (( 10,  20),   15,  706,  17),
+    #    (( 20,  30),   25,  478,  11),
+    #    (( 30,  40),   35,  315,   8),
+    #    (( 40,  50),   45,  198,   5),
+    #    (( 50,  60),   55,  118,   3),
+    #    (( 60,  70),   65, 64.7,   2),
+    #    (( 70,  80),   75, 32.0, 1.3),
+    #    (( 80,  90),   85, 13.3, 0.9),
+    #])
 
-    # PbPb2760 strange baryon yields
-    data['PbPb2760']['dN_dy']['Lambda'] = HEPData(1243863, 23).dataset(
-        RE='PB PB --> LAMBDA X'
-    )
-
-    d = HEPData(1243865, 11)
-    for s in ['Xi', 'Omega']:
-        data[system]['dN_dy'][s] = d.dataset(
-            RE='PB PB --> ({0}- + {0}BAR+) X'.format(s.upper())
-        )
-
-    # PbPb2760 mean pT fluctuations
-    d = HEPData(1307102, 6, reverse=True)
-    name = r'$\sqrt{C_m}/M(p_{\rm T})_m$'
-    # the table only has Npart, but they are actually 5% centrality bins
-    width = 5.
-    d.cent = [(n*width, (n+1)*width) for n, _ in enumerate(d.y(name))]
-    data['PbPb2760']['pT_fluct'] = {None: d.dataset(name, maxcent=60)}
-
-    # PbPb2760 and PbPb5020 flows
-    for system, tables_nk in [
-            ('PbPb5020', [
-                (1, [(2, 2), (2, 4)]),
-                (2, [(3, 2), (4, 2)]),
-            ]),
-            ('PbPb2760', [
-                (3, [(2, 2), (2, 4)]),
-                (4, [(3, 2), (4, 2)]),
-            ]),
-    ]:
-        data[system]['vnk'] = {}
-
-        for table, nk in tables_nk:
-            d = HEPData(1419244, table)
-            for n, k in nk:
-                data[system]['vnk'][n, k] = d.dataset(
-                    'V{}{{{}{}}}'.format(
-                        n, k, ', |DELTAETA|>1' if k == 2 else ''
-                    ),
-                    maxcent=(70 if n == 2 else 50)
-                )
-
-    # PbPb2760 central flows vn{2}
-    system, obs = 'PbPb2760', 'vnk_central'
-    data[system][obs] = {}
-
-    for n, table, sys_err_frac in [(2, 11, .025), (3, 12, .040)]:
-        dset = HEPData(900651, table).dataset()
-        # the (unlabeled) errors in the dataset are actually stat
-        dset['yerr']['stat'] = dset['yerr'].pop('sum')
-        # sys error is not provided -- use estimated fractions
-        dset['yerr']['sys'] = sys_err_frac * dset['y']
-        data[system][obs][n, 2] = dset
-
-    # PbPb2760 flow correlations
-    for obs, table in [
-            ('sc', 1),
-            ('sc_normed', 2),
-            ('sc_central', 3),
-            ('sc_normed_central', 4)
-    ]:
-        d = HEPData(1452590, table)
-        data['PbPb2760'][obs] = {
-            mn: d.dataset('SC({},{})'.format(*mn))
-            for mn in [(3, 2), (4, 2)]
-        }
+    #data['XeXe5440']['dNch_deta'][None] = dict(
+    #    cent=cent,
+    #    x=np.array(x),
+    #    y=np.array(y),
+    #    yerr={'stat': np.zeros_like(yerr), 'sys': np.array(yerr)}
+    #)
 
     return data
 
@@ -409,7 +480,7 @@ def print_data(d, indent=0):
         else:
             if k.endswith('cent'):
                 v = ' '.join(
-                    str(tuple(int(j) if j.is_integer() else j for j in i))
+                    str(tuple(j for j in i))
                     for i in v
                 )
             elif isinstance(v, np.ndarray):

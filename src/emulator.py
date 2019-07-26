@@ -67,15 +67,11 @@ class Emulator:
     #: Observables to emulate as a list of 2-tuples
     #: ``(obs, [list of subobs])``.
     observables = [
-        ('dNch_deta', [None]),
+        #('dNch_deta', [None]),
         ('dET_deta', [None]),
-        ('dN_dy', ['pion', 'kaon', 'proton']),
-        ('mean_pT', ['pion', 'kaon', 'proton']),
-        ('pT_fluct', [None]),
-        ('vnk', [(2, 2), (3, 2), (4, 2)]),
     ]
 
-    def __init__(self, system, npc=10, nrestarts=0):
+    def __init__(self, system, npc=2, nrestarts=0):
         logging.info(
             'training emulator for system %s (%d PC, %d restarts)',
             system, npc, nrestarts
