@@ -1,7 +1,6 @@
 design
 model_output
 *.dat
-*.hdf
 *.npy
 *.pdf
 *.pkl
