@@ -1,3 +1,3 @@
-# Bayesian parameter estimation for relativistic heavy-ion collisions
+# Bayesian parameter estimation of RHIC yields.
 
-Docs: [qcd.phy.duke.edu/hic-param-est](http://qcd.phy.duke.edu/hic-param-est)
+Attribution: This repository is based on Jonah Bernhard's Bayesian parameter estimation package for relativistic heavy-ion collisions.
