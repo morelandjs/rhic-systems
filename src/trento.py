@@ -67,5 +67,5 @@ if __name__ == '__main__':
     #for design_type in ['main', 'validation']:
     for design_type in ['main',]:
         multiprocessing.Pool(ncpu).map(
-            run_trento, (workdir / 'design' / design_type).glob('UU193/*')
+            run_trento, (workdir / 'design' / design_type).glob('*/*')
         )
