@@ -1,5 +1,6 @@
 design
 model_output
+mcmc
 *.dat
 *.npy
 *.pdf

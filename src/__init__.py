@@ -25,7 +25,6 @@ cachedir.mkdir(parents=True, exist_ok=True)
 #: Even if the project uses only a single system,
 #: this should still be a list of one system string.
 systems = ['dAu200', 'He3Au200', 'CuCu200', 'CuAu200', 'AuAu200', 'UU193']
-#systems = ['dAu200', 'He3Au200', 'CuCu200', 'CuAu200', 'AuAu200']
 
 
 def parse_system(system):
