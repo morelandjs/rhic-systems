@@ -8,7 +8,7 @@ Quick start
 
 Follow the installation instructions for hic-param-est: `qcd.phy.duke.edu/hic-param-est <http://qcd.phy.duke.edu/hic-param-est/#installation>`__.
 
-This project also requires the latest version of trento: `qcd.phy.duke.edu/trento <http://qcd.phy.duke.edu/trento/installation.html>`__.
+This project also requires a `modified version of trento <https://github.com/morelandjs/trento-fork/tree/thickness-exponent>`_. Make sure you clone and install the branch titled ``thickness-exponent``. See the `trento docs <http://qcd.phy.duke.edu/trento/>`_ for installation instructions.
 
 Once both packages are installed, the first step is to generate the computer experiment design.
 Take a look at `src.design` to change the number of design points, parameters, and parameter ranges.
