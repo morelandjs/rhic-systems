@@ -1,4 +1,4 @@
-emcee
+emcee==2.2.0
 h5py
 hic
 numpy

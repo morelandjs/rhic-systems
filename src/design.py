@@ -123,7 +123,7 @@ class Design:
         #   - escape spaces
         #   - surround with $$
         self.labels = [
-            re.sub(r'({[A-Za-z]+})', r'\mathrm\1', i)
+            re.sub(r'({[A-Za-z]+})', r'\\mathrm\1', i)
             .replace(' ', r'\ ')
             .join('$$')
             for i in labels
@@ -178,7 +178,7 @@ class Design:
             'He3': 'nuclei/He3.hdf',
             'Cu': 'Cu2',
             'Au': 'Au2',
-            'U': 'U2'
+            'U': 'U4'
         }
         projectiles = tuple(replacements[p] for p in self.projectiles)
 

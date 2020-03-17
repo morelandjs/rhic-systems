@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # run the model at each of the design points
     #for design_type in ['main', 'validation']:
-    for design_type in ['main',]:
+    for design_type in ['main', ]:
         multiprocessing.Pool(ncpu).map(
             run_trento, (workdir / 'design' / design_type).glob('*/*')
         )

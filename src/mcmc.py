@@ -194,7 +194,7 @@ class Chain:
             for n, sys in enumerate(systems)
         }
 
-    def log_posterior(self, X):
+    def log_posterior(self, X, extra_std=0.1):
         """
         Evaluate the posterior at `X`.
 
@@ -209,7 +209,8 @@ class Chain:
         nsamples = np.count_nonzero(inside)
 
         if nsamples > 0:
-            pred = self._predict(X[inside], return_cov=True)
+            pred = self._predict(X[inside], return_cov=True,
+                                 extra_std=extra_std)
 
             for sys in systems:
                 nobs = self._expt_y[sys].size
